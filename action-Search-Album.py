@@ -34,10 +34,12 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def action_wrapper(hermes, intentMessage, conf):
 
-    addon_name = conf['global']['favorite_addon1'] 
-    movie_name = intentMessage.slots.movie_name.first().value
+
+    album_name = intentMessage.slots.album_name.first().value
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
+    user_ =conf['global']['user'] 
+    password_ =conf['global']['password'] 
 
     def openAddon():
         request = "{\"jsonrpc\": \"2.0\", \"method\": \"Addons.ExecuteAddon\", \"params\": { \"addonid\": \"plugin.video." + addon_name + "\", \"params\":{\"action\":\"alert\"}}, \"id\": \"1\"}"
@@ -46,17 +48,18 @@ def action_wrapper(hermes, intentMessage, conf):
         json_data = simplejson.loads(response.text)
         
 
-    def searchMovie():
+    def searchAlbum():
         print("o")
-        request = "{\"jsonrpc\": \"2.0\", \"method\": \"Files.GetDirectory\", \"params\": { \"directory\": \"plugin://plugin.video.exodus/?action=movieSearchterm%26name=" + movie_name + "\"}, \"id\": 1 }"
+        #request = "{\"jsonrpc\": \"2.0\", \"method\": \"Files.GetDirectory\", \"params\": { \"directory\": \"plugin://plugin.video.exodus/?action=movieSearchterm%26name=" + movie_name + "\"}, \"id\": 1 }"
+        request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
         response = requests.get(url)
         json_data = simplejson.loads(response.text)
 
     try:           
-        openAddon()
-        time.sleep(3)
-        searchMovie()
+        #openAddon()
+        #time.sleep(3)
+        searchAlbum()
         hermes.publish_end_session(intentMessage.session_id, "")
     except requests.exceptions.RequestException:
         hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
@@ -69,5 +72,5 @@ def action_wrapper(hermes, intentMessage, conf):
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
-        h.subscribe_intent("Ianou:Search-movie", subscribe_intent_callback) \
+        h.subscribe_intent("LauDela:Search-album", subscribe_intent_callback) \
          .start()
