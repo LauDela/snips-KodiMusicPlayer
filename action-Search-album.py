@@ -57,8 +57,8 @@ def action_wrapper(hermes, intentMessage, conf):
         print("OK2")
         json_data = simplejson.loads(response.text)
         print("OK3")
-        #album = json_data['result'][0]['albums']['title'] 
-        album = json_data['albums']['title'][0]
+        album = json_data['result']['albums'][0]['title'] 
+        #album = json_data['albums']['title'][0]
         print("Retour:"+album)
         hermes.publish_end_session(current_session_id, "Album trouvé ")
 
