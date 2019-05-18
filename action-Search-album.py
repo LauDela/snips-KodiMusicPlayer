@@ -5,7 +5,6 @@ import ConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
-
 import time
 import simplejson
 import requests
@@ -56,8 +55,9 @@ def action_wrapper(hermes, intentMessage, conf):
         print("OK1")
         response = requests.get(url)
         print("OK2")
-        json_data = simplejson.loads(response)
+        json_data = simplejson.loads(response.text)
         print("OK3")
+        album = json_data['result'][0]['albums']['title'] 
         #album = json_data['albums']['title'][0]
         #print 'Retour:'.json_data
         hermes.publish_end_session(current_session_id, "Album trouvé ")
