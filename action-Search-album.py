@@ -56,7 +56,7 @@ def action_wrapper(hermes, intentMessage, conf):
         print("OK1")
         response = requests.get(url)
         print("OK2")
-        json_data = simplejson.loads(response.text)
+        json_data = simplejson.loads(response)
         print("OK3")
         #album = json_data['albums']['title'][0]
         #print 'Retour:'.json_data
