@@ -1,74 +1,53 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+import configparser
+import random
+import uuid
 
-import ConfigParser
-from hermes_python.hermes import Hermes
-from hermes_python.ontology import *
-import io
+import paho.mqtt.client as mqtt
+import json
+from os import listdir
+from os.path import isfile, join
 
-import simplejson
-import requests
+sound_files = [f for f in listdir("sounds") if isfile(join("sounds", f))]
+config = configparser.ConfigParser()
+config.read("config.ini")
 
-CONFIGURATION_ENCODING_FORMAT = "utf-8"
-CONFIG_INI = "config.ini"
-
-class SnipsConfigParser(ConfigParser.SafeConfigParser):
-    def to_dict(self):
-        return {section : {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
-
-
-def read_configuration_file(configuration_file):
-    try:
-        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
-            conf_parser = SnipsConfigParser()
-            conf_parser.readfp(f)
-            return conf_parser.to_dict()
-    except (IOError, ConfigParser.Error) as e:
-        return dict()
-
-def subscribe_intent_callback(hermes, intentMessage):
-    conf = read_configuration_file(CONFIG_INI)
-    action_wrapper(hermes, intentMessage, conf)
+mqtt_host = config["secret"]["mqtt_host"]
+mqtt_port = config["secret"].getint("mqtt_port")
+site_id = config["secret"]["site_id"]
 
 
-def action_wrapper(hermes, intentMessage, conf):
-    """
-    PLAY
-    """
-    addr_ = conf['global']['ip']
-    port_ =conf['global']['port']
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code " + str(rc))
 
-    """ Return boolean if is playing """
-    def isPlaying():
-        request = "{\"jsonrpc\": \"2.0\", \"method\": \"Player.GetProperties\", \"params\": {\"playerid\": 1, \"properties\": [\"speed\"]}, \"id\": 1}"
-        url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-        
-        response = requests.get(url)
-        json_data = simplejson.loads(response.text)
-        speed = json_data['result']['speed']
-        return speed > 0
-
-    def play():   
-        request = "{\"jsonrpc\": \"2.0\", \"method\": \"Player.PlayPause\", \"params\": { \"playerid\": 1 }, \"id\": 1}"
-        url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-        r = requests.get(url)
-        json_data = simplejson.loads(r.text)
-        if 'error' in json_data:
-            print(json_data['error'])
-        
-    
-    try:           
-        if not isPlaying():
-            play()
-        hermes.publish_end_session(intentMessage.session_id, "")
-    except requests.exceptions.RequestException:
-        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
-    except Exception:
-        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
+    # Subscribing in on_connect() means that if we lose the connection and
+    # reconnect then subscriptions will be renewed.
+    client.subscribe("hermes/intent/LauDela:Play")
 
 
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    if msg.topic == "hermes/intent/LauDela:Play":
+        payload = msg.payload
+        print("playing some good stuff")
+        playong_file_number = random.randint(1, len(sound_files))
+        with open("sounds/" + sound_files[playong_file_number], "rb") as sound_file:
+        with open("music/Hotel California.mp3", "rb") as sound_file:
+            imagestring = sound_file.read()
+            byte_array = bytearray(imagestring)
+            generated_id = uuid.uuid4().hex
+            client.publish("hermes/audioServer/" + site_id + "/playBytes/" + generated_id, byte_array)
+            client.publish("hermes/dialogueManager/endSession", json.dumps({"sessionId": payload["sessionId"]}))
 
-if __name__ == "__main__":
-    with Hermes("localhost:1883") as h:
-        h.subscribe_intent("Ianou:Play", subscribe_intent_callback) \
-         .start()
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.connect(mqtt_host, mqtt_port, 60)
+
+# Blocking call that processes network traffic, dispatches callbacks and
+# handles reconnecting.
+# Other loop*() functions are available that give a threaded interface and a
+# manual interface.
+client.loop_forever()

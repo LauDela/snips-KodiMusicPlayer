@@ -29,14 +29,11 @@ def read_configuration_file(configuration_file):
 
 def searchAlbum(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
-  #current_session_id = intentMessage.session_id
   album_name = intentMessage.slots.album_name.first().value
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
-  #print("o")
-  #request = "{\"jsonrpc\": \"2.0\", \"method\": \"Files.GetDirectory\", \"params\": { \"directory\": \"plugin://plugin.video.exodus/?action=movieSearchterm%26name=" + movie_name + "\"}, \"id\": 1 }"
   request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print(url)
@@ -46,7 +43,6 @@ def searchAlbum(hermes, intentMessage):
   print("OK3")
   album = json_data['result']['albums'][0]['title'] 
   print("Retour:"+album)
-  #hermes.publish_end_session(current_session_id, "Album trouvé "+album)
   result_sentence ="L'album est {}.".format(str(album))
   print(result_sentence)
   snips_speak(hermes, intentMessage,result_sentence)
