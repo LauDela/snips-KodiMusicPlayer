@@ -33,7 +33,7 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def action_wrapper(hermes, intentMessage, conf):
 
-
+    current_session_id = intentMessage.session_id
     album_name = intentMessage.slots.album_name.first().value
     addr_ = conf['global']['ip']
     port_ =conf['global']['port']
@@ -58,9 +58,8 @@ def action_wrapper(hermes, intentMessage, conf):
         json_data = simplejson.loads(response.text)
         print("OK3")
         album = json_data['result']['albums'][0]['title'] 
-        #album = json_data['albums']['title'][0]
         print("Retour:"+album)
-        hermes.publish_end_session(current_session_id, "Album trouvé ")
+        hermes.publish_end_session(current_session_id, "Album trouvé "+album)
 
     try:           
         #openAddon()
