@@ -30,7 +30,7 @@ def on_message(client, userdata, msg):
     if msg.topic == "hermes/intent/LauDela:Play":
         payload = msg.payload
         print("playing some good stuff")
-        playong_file_number = random.randint(1, len(sound_files))
+        #playong_file_number = random.randint(1, len(sound_files))
         #with open("sounds/" + sound_files[playong_file_number], "rb") as sound_file:
         with open("music/Hotel California.mp3", "rb") as sound_file:
             imagestring = sound_file.read()
