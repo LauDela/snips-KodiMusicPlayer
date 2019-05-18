@@ -47,7 +47,8 @@ def searchAlbum(hermes, intentMessage):
   album = json_data['result']['albums'][0]['title'] 
   print("Retour:"+album)
   #hermes.publish_end_session(current_session_id, "Album trouvé "+album)
-  result_sentence ="L'album trouvé est {}.".format(str(album))
+  result_sentence ="L'album est {}.".format(str(album))
+  print(result_sentence)
   snips_speak(hermes, intentMessage,result_sentence)
 
 def snips_speak(hermes, intentMessage,sentence):
