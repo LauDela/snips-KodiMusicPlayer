@@ -49,7 +49,10 @@ def searchAlbum(hermes, intentMessage):
   #hermes.publish_end_session(current_session_id, "Album trouvé "+album)
   result_sentence ="L'album trouvé est {}.".format(str(album))
   snips_speak(hermes, intentMessage,result_sentence)
-    
+
+def snips_speak(hermes, intentMessage,sentence):
+    current_session_id = intentMessage.session_id
+    hermes.publish_end_session(current_session_id, sentence)    
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
