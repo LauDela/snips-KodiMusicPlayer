@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 import json
 from os import listdir
 from os.path import isfile, join
+from hermes_python.hermes import Hermes
 
 sound_files = [f for f in listdir("sounds") if isfile(join("sounds", f))]
 config = configparser.ConfigParser()
