@@ -59,11 +59,11 @@ def action_wrapper(hermes, intentMessage, conf):
         #openAddon()
         #time.sleep(3)
         searchAlbum()
-        hermes.publish_end_session(intentMessage.session_id, "Album trouvé "+album)
+        hermes.publish_end_session(intentMessage.session_id, "OK terminé ")
     except requests.exceptions.RequestException:
         hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
     except Exception:
-        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
+        hermes.publish_end_session(intentMessage.session_id, "Album trouvé "+album)
 
 
 
