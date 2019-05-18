@@ -49,12 +49,15 @@ def action_wrapper(hermes, intentMessage, conf):
         
 
     def searchAlbum():
-        print("o")
+        #print("o")
         #request = "{\"jsonrpc\": \"2.0\", \"method\": \"Files.GetDirectory\", \"params\": { \"directory\": \"plugin://plugin.video.exodus/?action=movieSearchterm%26name=" + movie_name + "\"}, \"id\": 1 }"
         request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
+        print("OK1")
         response = requests.get(url)
-        #json_data = simplejson.loads(response.text)
+        print("OK2")
+        json_data = simplejson.loads(response.text)
+        print("OK3")
         #album = json_data['albums']['title'][0]
         #print 'Retour:'.json_data
         hermes.publish_end_session(current_session_id, "Album trouvé ")
