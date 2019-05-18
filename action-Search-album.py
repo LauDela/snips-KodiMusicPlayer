@@ -55,9 +55,9 @@ def action_wrapper(hermes, intentMessage, conf):
         url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
         response = requests.get(url)
         json_data = simplejson.loads(response.text)
-        album = json_data['albums']['title'][0]
-        print 'Retour:'.album
-        #hermes.publish_end_session(current_session_id, "Album trouvé " + album)
+        #album = json_data['albums']['title'][0]
+        #print 'Retour:'.json_data
+        hermes.publish_end_session(current_session_id, "Album trouvé ")
 
     try:           
         #openAddon()
