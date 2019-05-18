@@ -39,13 +39,7 @@ def action_wrapper(hermes, intentMessage, conf):
     port_ =conf['global']['port']
     user_ =conf['global']['user'] 
     password_ =conf['global']['password'] 
-
-    def openAddon():
-        request = "{\"jsonrpc\": \"2.0\", \"method\": \"Addons.ExecuteAddon\", \"params\": { \"addonid\": \"plugin.video." + addon_name + "\", \"params\":{\"action\":\"alert\"}}, \"id\": \"1\"}"
-        url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-        response = requests.get(url)
-        json_data = simplejson.loads(response.text)
-        
+   
 
     def searchAlbum():
         #print("o")
@@ -59,13 +53,13 @@ def action_wrapper(hermes, intentMessage, conf):
         print("OK3")
         album = json_data['result']['albums'][0]['title'] 
         print("Retour:"+album)
-        hermes.publish_end_session(current_session_id, "Album trouvé "+album)
+        #hermes.publish_end_session(current_session_id, "Album trouvé "+album)
 
     try:           
         #openAddon()
         #time.sleep(3)
         searchAlbum()
-        hermes.publish_end_session(intentMessage.session_id, "")
+        hermes.publish_end_session(intentMessage.session_id, "Album trouvé "+album)
     except requests.exceptions.RequestException:
         hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
     except Exception:
