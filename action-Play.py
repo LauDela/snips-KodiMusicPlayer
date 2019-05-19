@@ -41,7 +41,6 @@ def on_message(client, userdata, msg):
             client.publish("hermes/audioServer/" + site_id + "/playBytes/" + generated_id, byte_array)
             client.publish("hermes/dialogueManager/endSession", json.dumps({"sessionId": payload["sessionId"]}))
 
-
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
