@@ -28,6 +28,7 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+ print("TEST 1")
     if msg.topic == "hermes/intent/LauDela:Play":
         payload = msg.payload
         print("playing some good stuff")
