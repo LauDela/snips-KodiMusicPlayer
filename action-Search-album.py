@@ -43,7 +43,7 @@ def searchAlbum(hermes, intentMessage):
   print("OK3")
   album = json_data['result']['albums'][0]['title'] 
   artist = json_data['result']['albums'][0]['artist']
-  anee = json_data['result']['albums'][0]['year']  
+  annee = json_data['result']['albums'][0]['year']  
   print("Retour:"+album)
   result_sentence ="L'album est {} de {} sorti en {}.".format(str(album),str(artist),str(annee))
   print(result_sentence)
