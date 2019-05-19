@@ -1,5 +1,5 @@
 # Bindings for the hermes protocol 
 hermes-python>=0.1
-paho-mqtt==1.4.0
+
 requests
 simplejson
