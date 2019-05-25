@@ -46,7 +46,7 @@ def searchAlbum(hermes, intentMessage):
   annee = json_data['result']['albums'][0]['year']
   albumid = json_data['result']['albums'][0]['albumid']  
   print("Retour:"+album)
-  result_sentence ="L'album est {} de {} sorti en {} et son identifiant est .".format(str(album),str(artist),str(annee),str(albumid))
+  result_sentence ="L'album est {} de {} sorti en {} et son identifiant est {}.".format(str(album),str(artist),str(annee),str(albumid))
   print(result_sentence)
   snips_speak(hermes, intentMessage,result_sentence)
 
