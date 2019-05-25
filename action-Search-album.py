@@ -34,7 +34,7 @@ def searchAlbum(hermes, intentMessage):
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
-  request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
+  request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\", \"albumid\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print(url)
   response = requests.get(url)
@@ -43,9 +43,10 @@ def searchAlbum(hermes, intentMessage):
   print("OK3")
   album = json_data['result']['albums'][0]['title'] 
   artist = json_data['result']['albums'][0]['artist']
-  annee = json_data['result']['albums'][0]['year']  
+  annee = json_data['result']['albums'][0]['year']
+  albumid = json_data['result']['albums'][0]['albumid']  
   print("Retour:"+album)
-  result_sentence ="L'album est {} de {} sorti en {}.".format(str(album),str(artist),str(annee))
+  result_sentence ="L'album est {} de {} sorti en {} et son identifiant est .".format(str(album),str(artist),str(annee),str(albumid))
   print(result_sentence)
   snips_speak(hermes, intentMessage,result_sentence)
 
