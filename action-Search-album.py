@@ -58,9 +58,9 @@ def searchAlbum(hermes, intentMessage):
   response = requests.get(url)
   request ="{\"jsonrpc\": \"2.0\", \"id\": 2, \"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  print("lecture de la playlist")
+  print("lecture de la playlist " + url)
   response = requests.get(url)
-  
+  result_sentence = "c'est parti"
   snips_speak(hermes, intentMessage,result_sentence)
 
 def snips_speak(hermes, intentMessage,sentence):
