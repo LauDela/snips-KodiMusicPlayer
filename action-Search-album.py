@@ -52,7 +52,7 @@ def searchAlbum(hermes, intentMessage):
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Creation de la playlist " + url)
   response = requests.post(url)
-  print("Retour = " + response.status_code, response.reason)
+  print("Retour = " + str(response.status_code), str(response.reason))
   #print("Retour=" + str(response))
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":113}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
