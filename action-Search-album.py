@@ -64,7 +64,8 @@ def searchAlbum(hermes, intentMessage):
   response = requests.post(url)
   print("Retour=" + str(response))
   result_sentence = "c'est parti"
-  snips_speak(hermes, intentMessage,result_sentence)
+  hermes.publish_end_session(current_session_id, "OK c'est partit")
+#  snips_speak(hermes, intentMessage,result_sentence)
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
