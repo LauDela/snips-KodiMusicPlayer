@@ -52,12 +52,12 @@ def searchAlbum(hermes, intentMessage):
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Creation de la playlist " + url)
   response = requests.get(url)
-  request ="{\"jsonrpc\": \"2.0\", \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":113}}}"
+  request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":113}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Ajout a la playlist " + url)
   response = requests.get(url)
   print(response)
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 2, \"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1}}}"
+  request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("lecture de la playlist " + url)
   response = requests.get(url)
