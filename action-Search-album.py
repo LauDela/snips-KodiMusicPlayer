@@ -51,12 +51,12 @@ def searchAlbum(hermes, intentMessage):
   request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Clear\", \"params\": {\"playlistid\": 1}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Creation de la playlist " + url)
-  response = requests.get(url)
+  response = requests.post(url)
   print("Retour=" + str(response))
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":113}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Ajout a la playlist " + url)
-  response = requests.get(url)
+  response = requests.post(url)
   print("Retour=" + str(response))
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
@@ -64,7 +64,6 @@ def searchAlbum(hermes, intentMessage):
   response = requests.post(url)
   print("Retour=" + str(response))
   result_sentence = "c'est parti"
-  hermes.publish_end_session(current_session_id, "OK c'est partit")
 #  snips_speak(hermes, intentMessage,result_sentence)
 
 def snips_speak(hermes, intentMessage,sentence):
