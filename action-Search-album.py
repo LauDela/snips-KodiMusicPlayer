@@ -67,7 +67,7 @@ def searchAlbum(hermes, intentMessage):
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"GUI.ShowNotification\", \"params\": {\"title\": \"TEST\", \"message\":\"Lancement de la playliste\"}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("POPUP " + url)
-  response = requests.get(url)
+  response = requests.post(url)
   print("Retour=" + str(response))
   
   result_sentence = "c'est parti"
