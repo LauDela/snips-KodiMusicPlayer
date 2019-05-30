@@ -8,7 +8,6 @@ import io
 import time
 import simplejson
 import requests
-import http.client
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -50,32 +49,24 @@ def searchAlbum(hermes, intentMessage):
   result_sentence ="L'album est {} de {} sorti en {} et son identifiant est {}.".format(str(album),str(artist),str(annee),str(albumid))
   print(result_sentence)
   
-  conn = http.client.HTTPConnection(user_+":"+password_+"@"+ addr_ + ":" + port_)
-  headers = {'Content-type': 'application/json'}
-  foo = {'jsonrpc': '2.0', 'id': 0, 'method' : 'Playlist.Clear', 'params': {'playlistid': 1}}
-  json_data = simplejson.dumps(foo)
-  conn.request('POST', '/post', json_data, headers)
-  response = conn.getresponse()
-  print(response.read().decode())
-  
-  
-  
-  
-  #request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Clear\", \"params\": {\"playlistid\": 1}}"
-  #url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  #print("Creation de la playlist " + url)
-  #response = requests.get(url)
-  #print("Retour = " + str(response.status_code), str(response.reason))
+  request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Clear\", \"params\": {\"playlistid\": 1}}"
+  url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  print("Creation de la playlist " + url)
+  response = requests.get(url)
+  print("Retour = " + str(response.status_code), str(response.reason))
+
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":"+str(albumid)+"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("Ajout a la playlist " + url)
   response = requests.get(url)
   print("Retour=" + str(response))
+
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1},\"playerid\":0}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("lecture de la playlist " + url)
   response = requests.get(url)
   print("Retour=" + str(response))
+
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"GUI.ShowNotification\", \"params\": {\"title\": \"TEST\", \"message\":\"Lancement de la playliste\"}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   print("POPUP " + url)
