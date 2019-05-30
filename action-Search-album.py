@@ -89,7 +89,7 @@ def searchAlbum(hermes, intentMessage):
   #response = requests.get(url)
   #print("Retour=" + str(response))
 
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"playlistid": 1},"playerid":0}}'
+  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"position":0,"playlistid": 1}}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
