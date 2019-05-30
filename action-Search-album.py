@@ -8,6 +8,7 @@ import io
 import time
 import simplejson
 import requests
+import json
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
