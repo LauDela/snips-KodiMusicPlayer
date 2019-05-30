@@ -34,8 +34,10 @@ def searchAlbum(hermes, intentMessage):
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
+  headers = {'Content-type': 'application/json',}
   request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   print(url)
   response = requests.get(url)
   print("OK2")
@@ -49,29 +51,60 @@ def searchAlbum(hermes, intentMessage):
   result_sentence ="L'album est {} de {} sorti en {} et son identifiant est {}.".format(str(album),str(artist),str(annee),str(albumid))
   print(result_sentence)
   
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Clear\", \"params\": {\"playlistid\": 1}}"
-  url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  print("Creation de la playlist " + url)
-  response = requests.get(url)
-  print("Retour = " + str(response.status_code), str(response.reason))
 
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":"+str(albumid)+"}}}"
-  url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  print("Ajout a la playlist " + url)
-  response = requests.get(url)
-  print("Retour=" + str(response))
+  
+  data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
+  
+  #request ="{\"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"Playlist.Clear\", \"params\": {\"playlistid\": 1}}"
+  #url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  #print("Creation de la playlist " + url)
+  #response = requests.get(url)
+  #print("Retour = " + str(response.status_code), str(response.reason))
 
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1},\"playerid\":0}}"
-  url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  print("lecture de la playlist " + url)
-  response = requests.get(url)
-  print("Retour=" + str(response))
+  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.Add", "params": {"playlistid": 1, "item": { "albumid":'+str(albumid)+'}}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
+  #request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"Playlist.Add\", \"params\": {\"playlistid\": 1, \"item\": { \"albumid\":"+str(albumid)+"}}}"
+  #url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  #print("Ajout a la playlist " + url)
+  #response = requests.get(url)
+  #print("Retour=" + str(response))
+  
+  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"playlistid": 1},"playerid":0}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
 
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"GUI.ShowNotification\", \"params\": {\"title\": \"TEST\", \"message\":\"Lancement de la playliste\"}}"
-  url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
-  print("POPUP " + url)
-  response = requests.post(url)
-  print("Retour=" + str(response))
+  #request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"Player.Open\", \"params\": {\"item\": {\"playlistid\": 1},\"playerid\":0}}"
+  #url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  #print("lecture de la playlist " + url)
+  #response = requests.get(url)
+  #print("Retour=" + str(response))
+
+  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"playlistid": 1},"playerid":0}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
+  
+  #request ="{\"jsonrpc\": \"2.0\", \"id\": 1,\"method\": \"GUI.ShowNotification\", \"params\": {\"title\": \"TEST\", \"message\":\"Lancement de la playliste\"}}"
+  #url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
+  #print("POPUP " + url)
+  #response = requests.post(url)
+  #print("Retour=" + str(response))
+  
+  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "TEST", "message":"Lancement de la playliste"}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
   
   result_sentence = "c'est parti"
   current_session_id = intentMessage.session_id
