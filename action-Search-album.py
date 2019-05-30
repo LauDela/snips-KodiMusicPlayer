@@ -53,7 +53,7 @@ def searchAlbum(hermes, intentMessage):
   conn = http.client.HTTPSConnection("http://" +user_+":"+password_+"@"+ addr_ + ":" + port_)
   headers = {'Content-type': 'application/json'}
   foo = {'jsonrpc': '2.0', 'id': 0, 'method' : 'Playlist.Clear', 'params': {'playlistid': 1}}
-  json_data = json.dumps(foo)
+  json_data = simplejson.dumps(foo)
   conn.request('POST', '/post', json_data, headers)
   response = conn.getresponse()
   print(response.read().decode())
