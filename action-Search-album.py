@@ -50,7 +50,7 @@ def searchAlbum(hermes, intentMessage):
   result_sentence ="L'album est {} de {} sorti en {} et son identifiant est {}.".format(str(album),str(artist),str(annee),str(albumid))
   print(result_sentence)
   
-  conn = http.client.HTTPConnection("http://" +user_+":"+password_+"@"+ addr_ + ":" + port_)
+  conn = http.client.HTTPConnection(user_+":"+password_+"@"+ addr_ + ":" + port_)
   headers = {'Content-type': 'application/json'}
   foo = {'jsonrpc': '2.0', 'id': 0, 'method' : 'Playlist.Clear', 'params': {'playlistid': 1}}
   json_data = simplejson.dumps(foo)
