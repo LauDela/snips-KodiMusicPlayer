@@ -30,6 +30,7 @@ def read_configuration_file(configuration_file):
 
 def suivante(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
+  current_session_id = intentMessage.session_id
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
