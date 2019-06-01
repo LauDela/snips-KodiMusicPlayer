@@ -37,11 +37,8 @@ def jestop(hermes, intentMessage):
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
-  response = requests.get(url)
   
-
-  
-  data = '{"jsonrpc":"2.0", "method":"Player.Stop","params":{ "playerid":0},"id":1}'
+  data = '{"jsonrpc":"2.0", "method":"Player.Stop","params":{ "playerid":1},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
@@ -53,7 +50,7 @@ def jestop(hermes, intentMessage):
   
 
   
-  hermes.publish_end_session(current_session_id, "ok")
+  hermes.publish_end_session(current_session_id, "Lecture arrêtée")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id

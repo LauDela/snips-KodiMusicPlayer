@@ -38,9 +38,6 @@ def jejoue(hermes, intentMessage):
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
-  response = requests.get(url)
-  
-
   
   data = '{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"special://profile/playlists/music/'+playlist_+'"}}}'
   response = requests.post(kodi_url, headers=headers, data=data)
