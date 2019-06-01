@@ -52,7 +52,7 @@ def jejoue(hermes, intentMessage):
   
 
   
-  hermes.publish_end_session(current_session_id, "ok")
+  hermes.publish_end_session(current_session_id, "Playliste démarée")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
