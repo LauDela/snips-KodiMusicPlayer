@@ -38,7 +38,7 @@ def precedente(hermes, intentMessage):
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
-  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":0,"to":"previous"},"id":1}'
+  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":1,"to":"previous"},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
@@ -48,7 +48,7 @@ def precedente(hermes, intentMessage):
   json_obj= response.text
   json_data = json.loads(json_obj)
  
-  hermes.publish_end_session(current_session_id, "ok")
+  hermes.publish_end_session(current_session_id, "Titre précédent")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id

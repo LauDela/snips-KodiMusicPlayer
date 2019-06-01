@@ -51,7 +51,7 @@ def suivante(hermes, intentMessage):
   
 
   
-  hermes.publish_end_session(current_session_id, "ok")
+  hermes.publish_end_session(current_session_id, "Titre suivant")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
