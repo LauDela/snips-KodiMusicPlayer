@@ -42,7 +42,7 @@ def NowPlaying(hermes, intentMessage):
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   response = requests.get(url)
   json_data = simplejson.loads(response.text)
-  album = json_data['result']['item'][0]['album'] 
+  album = str(json_data['result']['item'][0]['album']) 
   artist = json_data['result']['item'][0]['artist']
   label = json_data['result']['item'][0]['label']
   
