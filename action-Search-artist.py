@@ -30,7 +30,7 @@ def read_configuration_file(configuration_file):
 
 def searchArtist(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
-  artist_name = intentMessage.slots.artist_name.first().value
+  artist_name = intentMessage.slots.artist.first().value
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
