@@ -1,18 +1,19 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import ConfigParser
+import configparser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
-
+import time
 import simplejson
 import requests
+import json
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-class SnipsConfigParser(ConfigParser.SafeConfigParser):
+class SnipsConfigParser(configparser.SafeConfigParser):
     def to_dict(self):
         return {section : {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
 
@@ -26,35 +27,39 @@ def read_configuration_file(configuration_file):
     except (IOError, ConfigParser.Error) as e:
         return dict()
 
-def subscribe_intent_callback(hermes, intentMessage):
-    conf = read_configuration_file(CONFIG_INI)
-    action_wrapper(hermes, intentMessage, conf)
 
+def jestop(hermes, intentMessage):
+  conf = read_configuration_file(CONFIG_INI)
+  addr_ = conf['global']['ip']
+  port_ =conf['global']['port']
+  user_ =conf['global']['user'] 
+  password_ =conf['global']['password']
+  headers = {'Content-type': 'application/json',}
+  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
+  
+  response = requests.get(url)
+  
 
-def action_wrapper(hermes, intentMessage, conf):
-    """
-    Stop
-    """
+  
+  data = '{"jsonrpc":"2.0", "method":"Player.Stop","params":{ "playerid":0},"id":1}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+     
+  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Lecture arrêtée"}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)
+  
 
-    addr_ = conf['global']['ip']
-    port_ =conf['global']['port']
+  
+  hermes.publish_end_session(current_session_id, "ok")
 
-    def stop():
-        request = "{\"jsonrpc\": \"2.0\", \"method\": \"Player.Stop\", \"params\": { \"playerid\": 1 }, \"id\": 1}"
-        url = "http://" + addr_ + ":" + port_ + "/jsonrpc?request=" + request
-        response = requests.get(url)
-
-    try:           
-        stop()
-        hermes.publish_end_session(intentMessage.session_id, "")
-    except requests.exceptions.RequestException:
-        hermes.publish_end_session(intentMessage.session_id, "Erreur de connection.")
-    except Exception:
-        hermes.publish_end_session(intentMessage.session_id, "Erreur de l'application.")
-
-
+def snips_speak(hermes, intentMessage,sentence):
+    current_session_id = intentMessage.session_id
+    hermes.publish_end_session(current_session_id, sentence)    
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
-        h.subscribe_intent("Ianou:Stop", subscribe_intent_callback) \
+        h.subscribe_intent("LauDela:Stop", jestop) \
          .start()

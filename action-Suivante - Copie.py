@@ -28,13 +28,12 @@ def read_configuration_file(configuration_file):
         return dict()
 
 
-def jejoue(hermes, intentMessage):
+def suivante(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
-  playlist_ =conf['global']['favorite_playlist']
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
@@ -42,12 +41,12 @@ def jejoue(hermes, intentMessage):
   
 
   
-  data = '{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"special://profile/playlists/music/'+playlist_+'"}}}'
+  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":0,"to":"next"},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
      
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Lecture playliste"}}'
+  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Titre suivant"}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
@@ -62,5 +61,5 @@ def snips_speak(hermes, intentMessage,sentence):
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
-        h.subscribe_intent("LauDela:Play", jejoue) \
+        h.subscribe_intent("LauDela:Suivante", suivante) \
          .start()

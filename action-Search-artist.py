@@ -37,7 +37,7 @@ def searchArtist(hermes, intentMessage):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   #request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetArtist s\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\"], \"sort\": { \"order\": \"ascending\", \"method\": \"artist\", \"ignorearticle\": true }, \"filter\": {\"field\": \"artist\", \"operator\":\"contains\",\"value\":\""+ artist_name +"\"} }, \"id\": \"libArtists\"}"
-  request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \"depeche\"}}}"
+  request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   print(url)
