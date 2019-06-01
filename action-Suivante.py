@@ -36,11 +36,8 @@ def suivante(hermes, intentMessage):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  
-  response = requests.get(url)
-  
 
-  
+ 
   data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":0,"to":"next"},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
