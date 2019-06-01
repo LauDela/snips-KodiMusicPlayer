@@ -30,6 +30,7 @@ def read_configuration_file(configuration_file):
 
 def NowPlaying(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
+  current_session_id = intentMessage.session_id
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
@@ -49,7 +50,7 @@ def NowPlaying(hermes, intentMessage):
   
   result_sentence ="C'est l'album {} de {} et le titre est {}.".format(str(album),str(artist),str(label))
      
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Titre suivant"}}'
+  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"information"}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)

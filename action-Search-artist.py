@@ -69,16 +69,16 @@ def searchArtist(hermes, intentMessage):
   json_obj= response.text
   json_data = json.loads(json_obj)
   
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"position":0,"playlistid": 1}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
+ 
   data='{"jsonrpc":"2.0","method":"Player.SetShuffle","params":{"playerid":1,"shuffle":true},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
-  
+
+  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"position":0,"playlistid": 1}}}'
+  response = requests.post(kodi_url, headers=headers, data=data)
+  json_obj= response.text
+  json_data = json.loads(json_obj)  
     
   data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "TEST", "message":"Lancement de la playliste"}}'
   response = requests.post(kodi_url, headers=headers, data=data)
