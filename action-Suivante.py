@@ -39,7 +39,7 @@ def suivante(hermes, intentMessage):
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
 
  
-  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":0,"to":"next"},"id":1}'
+  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":1,"to":"next"},"id":1}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
