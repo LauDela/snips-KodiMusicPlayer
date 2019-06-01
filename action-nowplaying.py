@@ -41,8 +41,9 @@ def NowPlaying(hermes, intentMessage):
   request ="{\"jsonrpc\": \"2.0\", \"method\": \"Player.GetItem\", \"params\": { \"properties\": [\"title\", \"album\", \"artist\"], \"playerid\": 1 }, \"id\": \"AudioGetItem\"}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   response = requests.get(url)
+  print(url)
   json_data = simplejson.loads(response.text)
-  album = str(json_data['result']['item'][0]['album']) 
+  album = json_data['result']['item'][0]['album'] 
   artist = json_data['result']['item'][0]['artist']
   label = json_data['result']['item'][0]['label']
   
