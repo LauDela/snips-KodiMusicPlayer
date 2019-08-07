@@ -9,6 +9,7 @@ import time
 import simplejson
 import requests
 import json
+import soco
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -35,18 +36,9 @@ def precedente(hermes, intentMessage):
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
-  headers = {'Content-type': 'application/json',}
-  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
-  data = '{"jsonrpc":"2.0","method":"Player.GoTo","params":{ "playerid":1,"to":"previous"},"id":1}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-     
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Titre precedent"}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
+  zone = soco.SoCo('192.168.10.4') 
+  zone.previous()
  
   hermes.publish_end_session(current_session_id, "Titre précédent")
 

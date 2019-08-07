@@ -9,6 +9,8 @@ import time
 import simplejson
 import requests
 import json
+import soco
+from requests.utils import requote_uri
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -36,23 +38,22 @@ def searchArtist(hermes, intentMessage):
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
-  #request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetArtists\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\"], \"sort\": { \"order\": \"ascending\", \"method\": \"artist\", \"ignorearticle\": true }, \"filter\": {\"field\": \"artist\", \"operator\":\"contains\",\"value\":\""+ artist_name +"\"} }, \"id\": \"libArtists\"}"
+  zone = soco.SoCo('192.168.10.4')  
+  zone.clear_queue()
+
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  print(url)
+  #print(url)
   response = requests.get(url)
   json_data = simplejson.loads(response.text)
-  #album = json_data['result']['albums'][0]['title'] 
   artist = json_data['result']['artists'][0]['artist']
   label = json_data['result']['artists'][0]['label']
   artistid = json_data['result']['artists'][0]['artistid']  
-  print("Retour:"+artist)
+  
   result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
   current_session_id = intentMessage.session_id
   print(result_sentence)
-  
-
   
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
@@ -63,29 +64,24 @@ def searchArtist(hermes, intentMessage):
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
   json_data = json.loads(json_obj)
-    
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"playlistid": 1},"playerid":0}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
   
- 
-  data='{"jsonrpc":"2.0","method":"Player.SetShuffle","params":{"playerid":1,"shuffle":true},"id":1}'
+  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.GetItems", "params": {"playlistid": 1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
-  json_data = json.loads(json_obj)
+  json_data = simplejson.loads(response.text)
+  for song in json_data['result']['items']:
+    songId = song['id']
+    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+    response = requests.post(kodi_url, headers=headers, data=data)
+    json_obj0= response.text
+    json_data0 = json.loads(json_obj0)
+    chemin = json_data0['result']['songdetails']['file']
+    chemin = chemin.replace("smb","x-file-cifs")
+    chemin = requote_uri(chemin)
+    zone.add_uri_to_queue(uri=chemin)
+    zone.play_from_queue(index=0)
+    zone.play_mode = 'SHUFFLE'
 
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"position":0,"playlistid": 1}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)  
-    
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "TEST", "message":"Lancement de la playliste"}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  
   #result_sentence = "c'est parti"
   
   hermes.publish_end_session(current_session_id, "c'est partit")
