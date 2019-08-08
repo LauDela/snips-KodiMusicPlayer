@@ -78,6 +78,7 @@ def searchArtist(hermes, intentMessage):
       chemin = json_data0['result']['songdetails']['file']
       chemin = chemin.replace("smb","x-file-cifs")
       chemin = requote_uri(chemin)
+      print(chemin)
       zone.add_uri_to_queue(uri=chemin)
       zone.play_from_queue(index=0)
       zone.play_mode = 'SHUFFLE'
