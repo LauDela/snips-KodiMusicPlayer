@@ -50,41 +50,41 @@ def searchArtist(hermes, intentMessage):
   artist = json_data['result']['artists'][0]['artist']
   label = json_data['result']['artists'][0]['label']
   artistid = json_data['result']['artists'][0]['artistid']  
+  if artistid > 0:
+    result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
+    current_session_id = intentMessage.session_id
+    print(result_sentence)
   
-  result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
-  current_session_id = intentMessage.session_id
-  print(result_sentence)
-  
-  data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.Add", "params": {"playlistid": 1, "item": { "artistid":'+str(artistid)+'}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.GetItems", "params": {"playlistid": 1}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = simplejson.loads(response.text)
-  for song in json_data['result']['items']:
-    songId = song['id']
-    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+    data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
     response = requests.post(kodi_url, headers=headers, data=data)
-    json_obj0= response.text
-    json_data0 = json.loads(json_obj0)
-    chemin = json_data0['result']['songdetails']['file']
-    chemin = chemin.replace("smb","x-file-cifs")
-    chemin = requote_uri(chemin)
-    zone.add_uri_to_queue(uri=chemin)
-    zone.play_from_queue(index=0)
-    zone.play_mode = 'SHUFFLE'
-
-  #result_sentence = "c'est parti"
+    json_obj= response.text
+    json_data = json.loads(json_obj)
   
-  hermes.publish_end_session(current_session_id, "c'est partit")
+    data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.Add", "params": {"playlistid": 1, "item": { "artistid":'+str(artistid)+'}}}'
+    response = requests.post(kodi_url, headers=headers, data=data)
+    json_obj= response.text
+    json_data = json.loads(json_obj)
+  
+    data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.GetItems", "params": {"playlistid": 1}}'
+    response = requests.post(kodi_url, headers=headers, data=data)
+    json_obj= response.text
+    json_data = simplejson.loads(response.text)
+    for song in json_data['result']['items']:
+      songId = song['id']
+      data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+      response = requests.post(kodi_url, headers=headers, data=data)
+      json_obj0= response.text
+      json_data0 = json.loads(json_obj0)
+      chemin = json_data0['result']['songdetails']['file']
+      chemin = chemin.replace("smb","x-file-cifs")
+      chemin = requote_uri(chemin)
+      zone.add_uri_to_queue(uri=chemin)
+      zone.play_from_queue(index=0)
+      zone.play_mode = 'SHUFFLE'
+  else:
+      result_sentence = "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?"
+  
+  hermes.publish_end_session(current_session_id, result_sentence)
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
