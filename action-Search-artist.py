@@ -45,12 +45,12 @@ def searchArtist(hermes, intentMessage):
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   #print(url)
-  response = requests.get(url)
-  json_data = simplejson.loads(response.text)
-  artist = json_data['result']['artists'][0]['artist']
-  label = json_data['result']['artists'][0]['label']
-  artistid = json_data['result']['artists'][0]['artistid']  
-  if artistid > 0:
+  try:
+    response = requests.get(url)
+    json_data = simplejson.loads(response.text)
+    artist = json_data['result']['artists'][0]['artist']
+    label = json_data['result']['artists'][0]['label']
+    artistid = json_data['result']['artists'][0]['artistid']  
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     current_session_id = intentMessage.session_id
     print(result_sentence)
@@ -81,10 +81,9 @@ def searchArtist(hermes, intentMessage):
       zone.add_uri_to_queue(uri=chemin)
       zone.play_from_queue(index=0)
       zone.play_mode = 'SHUFFLE'
-    else:
-      result_sentence = "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?"
-  
-  hermes.publish_end_session(current_session_id, result_sentence)
+      hermes.publish_end_session(current_session_id, "C'est parti !")
+except:
+      hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
