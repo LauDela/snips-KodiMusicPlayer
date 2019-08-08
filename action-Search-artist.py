@@ -81,7 +81,7 @@ def searchArtist(hermes, intentMessage):
       zone.add_uri_to_queue(uri=chemin)
       zone.play_from_queue(index=0)
       zone.play_mode = 'SHUFFLE'
-  else:
+    else:
       result_sentence = "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?"
   
   hermes.publish_end_session(current_session_id, result_sentence)
