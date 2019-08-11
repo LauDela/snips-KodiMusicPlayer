@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import configparser
-from hermes-python.hermes import Hermes     
-from hermes-python.ontology import *
+from hermes_python.hermes import Hermes    
+from hermes_python.ontology import *
 import io
 import time
 import simplejson
