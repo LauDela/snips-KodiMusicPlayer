@@ -39,8 +39,8 @@ def searchArtist(hermes, intentMessage):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   zone = soco.SoCo('192.168.10.4')  
-  zone.stop()
   zone.clear_queue()
+  zone.stop()
 
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
