@@ -1,8 +1,7 @@
 # Bindings for the hermes protocol 
-hermes-python>=0.1
+hermes-python>=0.2
 paho-mqtt==1.4.0
 requests
 simplejson
-json
 soco
 io

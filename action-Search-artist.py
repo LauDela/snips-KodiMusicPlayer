@@ -83,7 +83,7 @@ def searchArtist(hermes, intentMessage):
       zone.play_from_queue(index=0)
       zone.play_mode = 'SHUFFLE'
       hermes.publish_end_session(current_session_id, "C'est parti !")
-except:
+  except:
       hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
 def snips_speak(hermes, intentMessage,sentence):
