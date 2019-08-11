@@ -3,3 +3,6 @@ hermes-python>=0.1
 paho-mqtt==1.4.0
 requests
 simplejson
+json
+soco
+io
