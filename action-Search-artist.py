@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import configparser
 from hermes_python.hermes import Hermes    
 from hermes_python.ontology import *
+from requests.utils import requote_uri
+import configparser
 import io
 import time
 import simplejson
 import requests
 import json
 import soco
-from requests.utils import requote_uri
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
