@@ -81,9 +81,10 @@ def searchArtist(hermes, intentMessage):
       chemin = requote_uri(chemin)
       print(chemin)
       zone.add_uri_to_queue(uri=chemin)
-      zone.play_from_queue(index=0)
-      zone.play_mode = 'SHUFFLE'
-      hermes.publish_end_session(current_session_id, "C'est parti !")
+    
+    zone.play_from_queue(index=0)
+    zone.play_mode = 'SHUFFLE'
+    hermes.publish_end_session(current_session_id, "C'est parti !")
   except:
       hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
