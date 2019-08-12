@@ -54,6 +54,7 @@ def searchArtist(hermes, intentMessage):
     action_genereliste(hermes, intentMessage,artistid,conf)
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     print(result_sentence)
+    hermes.publish_end_session(current_session_id, "Liste terminée")
   except:
     hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
@@ -100,7 +101,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   print("fin boucle")
   zone.play_from_queue(index=0)
   zone.play_mode = 'SHUFFLE'
-  hermes.publish_end_session(current_session_id, "Liste terminée")
+  
 
 
 
