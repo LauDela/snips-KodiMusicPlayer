@@ -99,6 +99,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
     zone.add_uri_to_queue(uri=chemin)
     
   print("fin boucle")
+  hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   zone.play_from_queue(index=0)
   zone.play_mode = 'SHUFFLE'
   
