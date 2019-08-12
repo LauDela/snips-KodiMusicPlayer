@@ -38,6 +38,8 @@ def searchArtist(hermes, intentMessage):
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
+  current_session_id = intentMessage.session_id
+  hermes.publish_end_session(current_session_id, "TERMINE")
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
@@ -47,8 +49,6 @@ def searchArtist(hermes, intentMessage):
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   #print(url)
   try:
-    current_session_id = intentMessage.session_id
-    hermes.publish_end_session(current_session_id, "TERMINE")
     response = requests.get(url)
     json_data = simplejson.loads(response.text)
     artist = json_data['result']['artists'][0]['artist']
