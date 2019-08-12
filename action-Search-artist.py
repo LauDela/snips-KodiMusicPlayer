@@ -56,8 +56,8 @@ def searchArtist(hermes, intentMessage):
     action_genereliste(hermes, intentMessage,artistid)
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     print(result_sentence)
-      except:
-      hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
+  except:
+    hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
 def action_genereliste(hermes, intentMessage,artist_id):
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
