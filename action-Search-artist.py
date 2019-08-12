@@ -55,7 +55,7 @@ def searchArtist(hermes, intentMessage):
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     current_session_id = intentMessage.session_id
     print(result_sentence)
-  
+    hermes.publish_end_session(current_session_id, "J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label)))
     data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
     response = requests.post(kodi_url, headers=headers, data=data)
     json_obj= response.text
@@ -71,7 +71,7 @@ def searchArtist(hermes, intentMessage):
     json_obj= response.text
     json_data = simplejson.loads(response.text)
     #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
-    hermes.publish_continue_session(current_session_id,"LA liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+    #hermes.publish_continue_session(current_session_id,"LA liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
     for song in json_data['result']['items']:
       songId = song['id']
       data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
