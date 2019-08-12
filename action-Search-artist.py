@@ -65,7 +65,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  
+  current_session_id = intentMessage.session_id
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
@@ -85,7 +85,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   json_obj= response.text
   json_data = simplejson.loads(response.text)
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
-  #hermes.publish_continue_session(current_session_id,"LA liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+  hermes.publish_continue_session(current_session_id,"LA liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   for song in json_data['result']['items']:
     songId = song['id']
     data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
