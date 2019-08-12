@@ -70,6 +70,7 @@ def searchArtist(hermes, intentMessage):
     response = requests.post(kodi_url, headers=headers, data=data)
     json_obj= response.text
     json_data = simplejson.loads(response.text)
+    hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
     for song in json_data['result']['items']:
       songId = song['id']
       data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
@@ -83,7 +84,6 @@ def searchArtist(hermes, intentMessage):
       zone.add_uri_to_queue(uri=chemin)
     
     print("fin boucle")
-    hermes.publish_end_session(current_session_id, result_sentence)
     zone.play_from_queue(index=0)
     zone.play_mode = 'SHUFFLE'
     
