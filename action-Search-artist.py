@@ -84,7 +84,7 @@ def searchArtist(hermes, intentMessage):
     
     zone.play_from_queue(index=0)
     zone.play_mode = 'SHUFFLE'
-    hermes.publish_end_session(current_session_id, "C'est parti !")
+    hermes.publish_end_session(current_session_id, result_sentence)
   except:
       hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
