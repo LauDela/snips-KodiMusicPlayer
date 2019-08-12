@@ -51,11 +51,11 @@ def searchArtist(hermes, intentMessage):
     json_data = simplejson.loads(response.text)
     artist = json_data['result']['artists'][0]['artist']
     label = json_data['result']['artists'][0]['label']
-    artistid = json_data['result']['artists'][0]['artistid']
-    hermes.publish_end_session(current_session_id, "TERMINE")  
+    artistid = json_data['result']['artists'][0]['artistid']  
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     current_session_id = intentMessage.session_id
     print(result_sentence)
+    hermes.publish_end_session(current_session_id, "TERMINE")
     data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
     response = requests.post(kodi_url, headers=headers, data=data)
     json_obj= response.text
