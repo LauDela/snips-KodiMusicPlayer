@@ -39,11 +39,10 @@ def searchArtist(hermes, intentMessage):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   current_session_id = intentMessage.session_id
-  hermes.publish_end_session(current_session_id, "TERMINE")
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
-
+  hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
@@ -87,7 +86,7 @@ def searchArtist(hermes, intentMessage):
     print("fin boucle")
     zone.play_from_queue(index=0)
     zone.play_mode = 'SHUFFLE'
-    
+    hermes.publish_end_session(current_session_id, "Liste terminée")
   except:
       hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
