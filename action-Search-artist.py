@@ -39,9 +39,7 @@ def searchArtist(hermes, intentMessage):
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
   current_session_id = intentMessage.session_id
-  zone = soco.SoCo('192.168.10.4')  
-  zone.clear_queue()
-  zone.stop()
+  
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
@@ -53,13 +51,24 @@ def searchArtist(hermes, intentMessage):
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
     hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
-    action_genereliste(hermes, intentMessage,artistid)
+    action_genereliste(hermes, intentMessage,artistid,conf)
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     print(result_sentence)
   except:
     hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
-def action_genereliste(hermes, intentMessage,artistid):
+def action_genereliste(hermes, intentMessage,artistid,conf):
+  addr_ = conf['global']['ip']
+  port_ =conf['global']['port']
+  user_ =conf['global']['user'] 
+  password_ =conf['global']['password']
+  headers = {'Content-type': 'application/json',}
+  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
+  
+  zone = soco.SoCo('192.168.10.4')  
+  zone.clear_queue()
+  zone.stop()
+  
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
