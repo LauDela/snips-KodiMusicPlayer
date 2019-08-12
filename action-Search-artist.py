@@ -59,7 +59,7 @@ def searchArtist(hermes, intentMessage):
   except:
     hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
-def action_genereliste(hermes, intentMessage,artist_id):
+def action_genereliste(hermes, intentMessage,artistid):
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
