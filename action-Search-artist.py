@@ -87,7 +87,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   json_obj= response.text
   json_data = simplejson.loads(response.text)
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
-  hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
+  #hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
   
   for song in json_data['result']['items']:
     songId = song['id']
@@ -96,12 +96,12 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
     json_obj0= response.text
     json_data0 = json.loads(json_obj0)
     chemin = json_data0['result']['songdetails']['file']
-    chemin = chemin.replace("smb","x-file-cifs")
-    chemin = requote_uri(chemin)
-    print(chemin)
-#    zone.add_uri_to_queue(uri=chemin)
+    chemin1 = chemin.replace("smb","x-file-cifs")
+    chemin2 = requote_uri(chemin1)
+    print(chemin2)
+    #zone.add_uri_to_queue(uri=chemin2)
     
-  print("fin boucle")
+    #print("fin boucle")
   hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
 #  zone.play_from_queue(index=0)
 #  zone.play_mode = 'SHUFFLE'
