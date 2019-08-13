@@ -100,15 +100,11 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
     chemin2 = requote_uri(chemin1)
     #zone.add_uri_to_queue(uri=chemin2)
     
-  #print("fin boucle")
+  print("fin boucle")
   #zone.play_from_queue(index=0)
   #zone.play_mode = 'SHUFFLE'  
   #hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   
-
-
-
-
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
     hermes.publish_end_session(current_session_id, sentence)    
