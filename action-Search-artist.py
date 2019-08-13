@@ -89,16 +89,16 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
   hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
   
-#  for song in json_data['result']['items']:
-#    songId = song['id']
-#    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
-#    response = requests.post(kodi_url, headers=headers, data=data)
-#    json_obj0= response.text
-#    json_data0 = json.loads(json_obj0)
-#    chemin = json_data0['result']['songdetails']['file']
-#    chemin = chemin.replace("smb","x-file-cifs")
-#    chemin = requote_uri(chemin)
-#    print(chemin)
+  for song in json_data['result']['items']:
+    songId = song['id']
+    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+    response = requests.post(kodi_url, headers=headers, data=data)
+    json_obj0= response.text
+    json_data0 = json.loads(json_obj0)
+    chemin = json_data0['result']['songdetails']['file']
+    chemin = chemin.replace("smb","x-file-cifs")
+    chemin = requote_uri(chemin)
+    print(chemin)
 #    zone.add_uri_to_queue(uri=chemin)
     
   print("fin boucle")
