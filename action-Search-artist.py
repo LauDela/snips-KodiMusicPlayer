@@ -51,10 +51,11 @@ def searchArtist(hermes, intentMessage):
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
     #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+    hermes.publish_end_session(current_session_id, "Liste terminée")
     action_genereliste(hermes, intentMessage,artistid,conf)
     result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     print(result_sentence)
-    hermes.publish_end_session(current_session_id, "Liste terminée")
+    #hermes.publish_end_session(current_session_id, "Liste terminée")
   except:
     hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
@@ -69,7 +70,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
-  hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+  #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   json_obj= response.text
@@ -99,7 +100,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
     zone.add_uri_to_queue(uri=chemin)
     
   print("fin boucle")
-  hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
+  #hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   zone.play_from_queue(index=0)
   zone.play_mode = 'SHUFFLE'
   
