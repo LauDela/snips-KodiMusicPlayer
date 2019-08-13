@@ -99,12 +99,12 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
     chemin1 = chemin.replace("smb","x-file-cifs")
     chemin2 = requote_uri(chemin1)
     print(chemin2)
-    #zone.add_uri_to_queue(uri=chemin2)
+    zone.add_uri_to_queue(uri=chemin2)
     
     #print("fin boucle")
+  zone.play_from_queue(index=0)
+  zone.play_mode = 'SHUFFLE'  
   hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
-#  zone.play_from_queue(index=0)
-#  zone.play_mode = 'SHUFFLE'
   
 
 
