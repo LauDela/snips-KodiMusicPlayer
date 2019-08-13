@@ -32,8 +32,8 @@ def read_configuration_file(configuration_file):
 
 def searchArtist(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
-  #artist_name = intentMessage.slots.artist.first().value
-  artist_name = "alain souchon"
+  artist_name = intentMessage.slots.artist.first().value
+  #artist_name = "alain souchon"
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
@@ -71,7 +71,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
-  #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+  hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   #json_obj= response.text
@@ -89,22 +89,22 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
   hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   
-  for song in json_data['result']['items']:
-    songId = song['id']
-    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
-    response = requests.post(kodi_url, headers=headers, data=data)
-    json_obj0= response.text
-    json_data0 = json.loads(json_obj0)
-    chemin = json_data0['result']['songdetails']['file']
-    chemin = chemin.replace("smb","x-file-cifs")
-    chemin = requote_uri(chemin)
-    print(chemin)
-    zone.add_uri_to_queue(uri=chemin)
+#  for song in json_data['result']['items']:
+#    songId = song['id']
+#    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+#    response = requests.post(kodi_url, headers=headers, data=data)
+#    json_obj0= response.text
+#    json_data0 = json.loads(json_obj0)
+#    chemin = json_data0['result']['songdetails']['file']
+#    chemin = chemin.replace("smb","x-file-cifs")
+#    chemin = requote_uri(chemin)
+#    print(chemin)
+#    zone.add_uri_to_queue(uri=chemin)
     
   print("fin boucle")
   hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
-  zone.play_from_queue(index=0)
-  zone.play_mode = 'SHUFFLE'
+#  zone.play_from_queue(index=0)
+#  zone.play_mode = 'SHUFFLE'
   
 
 
