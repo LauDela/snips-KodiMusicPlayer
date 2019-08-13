@@ -30,18 +30,10 @@ def read_configuration_file(configuration_file):
 
 
 def jestop(hermes, intentMessage):
-  conf = read_configuration_file(CONFIG_INI)
   current_session_id = intentMessage.session_id
-  addr_ = conf['global']['ip']
-  port_ =conf['global']['port']
-  user_ =conf['global']['user'] 
-  password_ =conf['global']['password']
-  
   zone = soco.SoCo('192.168.10.4')  
   zone.clear_queue()
   zone.stop()
-
-  
   hermes.publish_end_session(current_session_id, "Lecture arrêtée")
 
 def snips_speak(hermes, intentMessage,sentence):
