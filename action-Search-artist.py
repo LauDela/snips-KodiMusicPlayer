@@ -87,7 +87,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   json_obj= response.text
   json_data = simplejson.loads(response.text)
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
-  #hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
+  hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
   
   for song in json_data['result']['items']:
     songId = song['id']
@@ -103,7 +103,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   #print("fin boucle")
   #zone.play_from_queue(index=0)
   #zone.play_mode = 'SHUFFLE'  
-  hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
+  #hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   
 
 
