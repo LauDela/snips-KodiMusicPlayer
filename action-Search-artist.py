@@ -71,7 +71,7 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   #zone = soco.SoCo('192.168.10.4')  
   #zone.clear_queue()
   #zone.stop()
-  hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
+  #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
   #json_obj= response.text
