@@ -68,9 +68,9 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   headers = {'Content-type': 'application/json',}
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   current_session_id = intentMessage.session_id
-  #zone = soco.SoCo('192.168.10.4')  
-  #zone.clear_queue()
-  #zone.stop()
+  zone = soco.SoCo('192.168.10.4')  
+  zone.clear_queue()
+  zone.stop()
   #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
   data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
   response = requests.post(kodi_url, headers=headers, data=data)
