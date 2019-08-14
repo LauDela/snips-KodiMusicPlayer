@@ -54,7 +54,8 @@ def searchArtist(hermes, intentMessage):
     hermes.publish_continue_session(current_session_id,"Veuillez patienter...",["LauDela:Search-artist"])
     #hermes.publish_end_session(current_session_id, "Liste terminée")
     #action_genereliste(hermes, intentMessage,artistid,conf)
-    r = requests.get('http://192.168.10.89/sonos.php?artistid='+artistid)
+    parametre= {'artistid' : artistid}
+    r = requests.post('http://192.168.10.89/sonos.php',params=parametre)
     #result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     #print(result_sentence)
     hermes.publish_end_session(current_session_id, "Liste terminée "+str(r))
