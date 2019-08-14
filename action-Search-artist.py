@@ -51,7 +51,7 @@ def searchArtist(hermes, intentMessage):
     artist = json_data['result']['artists'][0]['artist']
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
-    #hermes.publish_continue_session(current_session_id,"Veuillez patienter...",["LauDela:Search-artist"])
+    hermes.publish_continue_session(current_session_id,"Veuillez patienter...",["LauDela:Search-artist"])
     #hermes.publish_end_session(current_session_id, "Liste terminée")
     action_genereliste(hermes, intentMessage,artistid,conf)
     #result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
@@ -89,21 +89,21 @@ def action_genereliste(hermes, intentMessage,artistid,conf):
   #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
   hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
   
-  for song in json_data['result']['items']:
-    songId = song['id']
-    data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
-    response = requests.post(kodi_url, headers=headers, data=data)
-    json_obj0= response.text
-    json_data0 = json.loads(json_obj0)
-    chemin = json_data0['result']['songdetails']['file']
-    chemin1 = chemin.replace("smb","x-file-cifs")
-    chemin2 = requote_uri(chemin1)
-    #zone.add_uri_to_queue(uri=chemin2)
+  #for song in json_data['result']['items']:
+  #  songId = song['id']
+  #  data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
+  #  response = requests.post(kodi_url, headers=headers, data=data)
+  #  json_obj0= response.text
+  #  json_data0 = json.loads(json_obj0)
+  #  chemin = json_data0['result']['songdetails']['file']
+  #  chemin1 = chemin.replace("smb","x-file-cifs")
+  #  chemin2 = requote_uri(chemin1)
+  #  zone.add_uri_to_queue(uri=chemin2)
     
   print("fin boucle")
   #zone.play_from_queue(index=0)
   #zone.play_mode = 'SHUFFLE'  
-  #hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
+  hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
