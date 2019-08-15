@@ -56,7 +56,10 @@ def searchArtist(hermes, intentMessage):
     #action_genereliste(hermes, intentMessage,artistid,conf)
     parametre= {'artistid' : artistid}
     hermes.publish_end_session(current_session_id, "Liste terminée ")
-    requests.post('http://192.168.10.89/sonos.php',params=parametre)
+    try:
+      requests.post('http://192.168.10.89/sonos.php',params=parametre,timeout=0.0000000001)
+    except requests.exceptions.ReadTimeout: 
+      pass  
     #result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     #print(result_sentence)
     #hermes.publish_end_session(current_session_id, "Liste terminée "+str(r))
