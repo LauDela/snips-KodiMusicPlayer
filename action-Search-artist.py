@@ -60,7 +60,8 @@ def searchArtist(hermes, intentMessage):
     try:
       requests.get("http://192.168.10.89/sonos.php",timeout=5)
     except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
-      hermes.publish_end_session(current_session_id, "C'est partit !")
+      retour = "C'est partit pour du "+ str(label)
+      hermes.publish_end_session(current_session_id, str(retour))
     except:
       hermes.publish_end_session(current_session_id, "Oups problème")
     
