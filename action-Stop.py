@@ -32,7 +32,7 @@ def read_configuration_file(configuration_file):
 def jestop(hermes, intentMessage):
   current_session_id = intentMessage.session_id
   zone = soco.SoCo('192.168.10.4')  
-  zone.clear_queue()
+  #zone.clear_queue()
   zone.stop()
   hermes.publish_end_session(current_session_id, "Lecture arrêtée")
 

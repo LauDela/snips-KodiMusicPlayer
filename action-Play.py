@@ -29,30 +29,10 @@ def read_configuration_file(configuration_file):
 
 
 def jejoue(hermes, intentMessage):
-  conf = read_configuration_file(CONFIG_INI)
   current_session_id = intentMessage.session_id
-  addr_ = conf['global']['ip']
-  port_ =conf['global']['port']
-  user_ =conf['global']['user'] 
-  password_ =conf['global']['password']
-  playlist_ =conf['global']['favorite_playlist']
-  headers = {'Content-type': 'application/json',}
-  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  
-  
-  data = '{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"special://profile/playlists/music/'+playlist_+'"}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-                                                                                        
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Lecture playliste"}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-
-  
-  hermes.publish_end_session(current_session_id, "Playliste démarée")
+  zone = soco.SoCo('192.168.10.4')  
+  zone.play()
+  hermes.publish_end_session(current_session_id, "C'est repartit !")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
