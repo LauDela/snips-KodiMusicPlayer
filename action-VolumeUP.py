@@ -32,7 +32,7 @@ def read_configuration_file(configuration_file):
 def volumeUP(hermes, intentMessage):
   current_session_id = intentMessage.session_id
   zone = soco.SoCo('192.168.10.4') 
-  vol = float(zone.volume)+ float(50)  
+  vol = float(zone.volume)+ float(10)  
   zone.volume = float(vol)
   hermes.publish_end_session(current_session_id,"OK")
 

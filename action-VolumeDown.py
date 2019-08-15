@@ -32,8 +32,9 @@ def read_configuration_file(configuration_file):
 def volumedown(hermes, intentMessage):
   current_session_id = intentMessage.session_id
   zone = soco.SoCo('192.168.10.4') 
-  zone.volume = zone.volume - 5
-  hermes.publish_end_session(current_session_id)
+  vol = float(zone.volume) - float(10)  
+  zone.volume = float(vol)
+  hermes.publish_end_session(current_session_id,"OK")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
