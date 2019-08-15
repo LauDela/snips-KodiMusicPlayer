@@ -51,7 +51,7 @@ def searchArtist(hermes, intentMessage):
     artist = json_data['result']['artists'][0]['artist']
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
-    hermes.publish_continue_session(current_session_id,"OK je vais te passer du "+.format(str(label))+". Veuillez patienter...",["LauDela:Search-artist"]) 
+    hermes.publish_continue_session(current_session_id,"OK Veuillez patienter...",["LauDela:Search-artist"]) 
     #hermes.publish_end_session(current_session_id, "Liste terminée")
     #action_genereliste(hermes, intentMessage,artistid,conf)
     parametre= {'artistid' : artistid}
