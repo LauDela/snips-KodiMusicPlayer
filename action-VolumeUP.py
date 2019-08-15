@@ -29,7 +29,7 @@ def read_configuration_file(configuration_file):
         return dict()
 
 
-def precedente(hermes, intentMessage):
+def volumeUP(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
   current_session_id = intentMessage.session_id
   addr_ = conf['global']['ip']
@@ -42,7 +42,7 @@ def precedente(hermes, intentMessage):
   zone.volume = 50
   
  
-  hermes.publish_end_session(current_session_id)
+  hermes.publish_end_session(current_session_id,"")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
@@ -50,5 +50,5 @@ def snips_speak(hermes, intentMessage,sentence):
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
-        h.subscribe_intent("LauDela:VolumeUP", precedente) \
+        h.subscribe_intent("LauDela:VolumeUP", volumeUP) \
          .start()
