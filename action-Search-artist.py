@@ -4,7 +4,7 @@
 from hermes_python.hermes import Hermes    
 from hermes_python.ontology import *
 from requests.utils import requote_uri
-from requests import async
+from threading import Thread
 import configparser
 import io
 import time
@@ -57,7 +57,10 @@ def searchArtist(hermes, intentMessage):
     #action_genereliste(hermes, intentMessage,artistid,conf)
     parametre= {'artistid' : artistid}
     hermes.publish_end_session(current_session_id, "Liste terminée ")
-    async.get("http://192.168.10.89/sonos.php")
+    def open_website(url):
+    return urllib2.urlopen(url)
+    Thread(target=open_website, args=["http://192.168.10.89/sonos.php"]).start()
+    
       
     #result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
     #print(result_sentence)
