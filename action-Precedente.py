@@ -40,7 +40,7 @@ def precedente(hermes, intentMessage):
   zone = soco.SoCo('192.168.10.4') 
   zone.previous()
  
-  hermes.publish_end_session(current_session_id, "Titre précédent")
+  hermes.publish_end_session(current_session_id, "OK")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
