@@ -39,49 +39,23 @@ def searchAlbum(hermes, intentMessage):
   request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  print(url)
-  response = requests.get(url)
-  json_data = simplejson.loads(response.text)
-  album = json_data['result']['albums'][0]['title'] 
-  artist = json_data['result']['albums'][0]['artist']
-  annee = json_data['result']['albums'][0]['year']
-  albumid = json_data['result']['albums'][0]['albumid']  
-  print("Retour:"+album)
-  result_sentence ="J'ai trouvé l'album {} de {} sorti en {}. Le voici.".format(str(album),str(artist),str(annee))
-  current_session_id = intentMessage.session_id
-  print(result_sentence)
   
-
-  
-  data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.Add", "params": {"playlistid": 1, "item": { "albumid":'+str(albumid)+'}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-    
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"playlistid": 1},"playerid":0}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1,"method": "Player.Open", "params": {"item": {"position":0,"playlistid": 1}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-    
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "TEST", "message":"Lancement de la playliste"}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-  
-  #result_sentence = "c'est parti"
-  
-  hermes.publish_end_session(current_session_id, "c'est partit")
+  try:
+    response = requests.get(url)
+    json_data = simplejson.loads(response.text)
+    artist = json_data['result']['albums'][0]['artist']
+    titre = json_data['result']['albums'][0]['title']
+    albumid = json_data['result']['albums'][0]['albumid']
+    annee = json_data['result']['albums'][0]['year']
+    try:
+      requests.get("http://192.168.10.89/sonos.php?album="+str(albumid),timeout=2)
+    except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
+      retour = "Veuillez patienter, je recherche l'album "+ str(titre) + " de "+str(artist)
+      hermes.publish_end_session(current_session_id, str(retour))
+    except:
+      hermes.publish_end_session(current_session_id, "Oups problème")
+  except:
+    hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id

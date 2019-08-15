@@ -50,9 +50,9 @@ def searchArtist(hermes, intentMessage):
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
     try:
-      requests.get("http://192.168.10.89/sonos.php?params="+str(artistid),timeout=2)
+      requests.get("http://192.168.10.89/sonos.php?artiste="+str(artistid),timeout=2)
     except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
-      retour = "C'est partit pour du "+ str(label)
+      retour = "Veuillez patienter, je recherche des  titres de "+ str(label)
       hermes.publish_end_session(current_session_id, str(retour))
     except:
       hermes.publish_end_session(current_session_id, "Oups problème")
