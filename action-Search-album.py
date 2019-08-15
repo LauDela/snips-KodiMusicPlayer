@@ -32,12 +32,17 @@ def searchAlbum(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
   current_session_id = intentMessage.session_id
   album_name = intentMessage.slots.album_name.first().value
+  artist_name = intentMessage.slots.artiste.first().value
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
   headers = {'Content-type': 'application/json',}
-  request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
+  if artist_name :
+    request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"and\":[{\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"},{\"field\": \"artist\", \"operator\":\"contains\",\"value\":\""+ artist_name +"\"}] }, \"id\": \"libAlbums\"}"
+  else:
+    request ="{\"jsonrpc\": \"2.0\", \"method\": \"AudioLibrary.GetAlbums\", \"params\": { \"limits\": { \"start\" : 0, \"end\": 50 }, \"properties\": [\"artist\", \"year\", \"title\"], \"sort\": { \"order\": \"ascending\", \"method\": \"album\", \"ignorearticle\": true }, \"filter\": {\"field\": \"album\", \"operator\":\"contains\",\"value\":\""+ album_name +"\"} }, \"id\": \"libAlbums\"}"
+  
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
