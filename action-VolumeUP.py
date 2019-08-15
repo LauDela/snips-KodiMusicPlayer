@@ -34,7 +34,7 @@ def volumeUP(hermes, intentMessage):
   zone = soco.SoCo('192.168.10.4') 
   vol = float(zone.volume)+ float(10)  
   zone.volume = float(vol)
-  hermes.publish_end_session(current_session_id,"OK")
+  hermes.publish_end_session(current_session_id)
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
