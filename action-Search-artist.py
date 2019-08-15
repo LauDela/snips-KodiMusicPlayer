@@ -4,7 +4,6 @@
 from hermes_python.hermes import Hermes    
 from hermes_python.ontology import *
 from requests.utils import requote_uri
-from threading import Thread
 import configparser
 import io
 import time
@@ -56,9 +55,14 @@ def searchArtist(hermes, intentMessage):
     #hermes.publish_end_session(current_session_id, "Liste terminée")
     #action_genereliste(hermes, intentMessage,artistid,conf)
     parametre= {'artistid' : artistid}
-    hermes.publish_end_session(current_session_id, "Liste terminée ")
-    def open_website(url):
-    return urllib2.urlopen(url)
+    #hermes.publish_end_session(current_session_id, "Liste terminée ")
+    try:
+      requests.get("http://192.168.10.89/sonos.php",timeout=5)
+    except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
+      hermes.publish_end_session(current_session_id, "Liste terminée ")
+    except:
+      hermes.publish_end_session(current_session_id, "Oups problème")
+    
     Thread(target=open_website, args=["http://192.168.10.89/sonos.php"]).start()
     
       
