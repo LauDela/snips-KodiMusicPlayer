@@ -56,9 +56,9 @@ def searchArtist(hermes, intentMessage):
     #action_genereliste(hermes, intentMessage,artistid,conf)
     parametre= {'artistid' : artistid}
     #hermes.publish_end_session(current_session_id, "Liste terminée ")
-    url="http://192.168.10.89/sonos.php?params="+artistid
+    url="http://192.168.10.89/sonos.php"
     try:
-      requests.get(str(url),timeout=5)
+      requests.get("http://192.168.10.89/sonos.php",timeout=5)
     except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
       hermes.publish_end_session(current_session_id, "C'est partit !")
     except:
