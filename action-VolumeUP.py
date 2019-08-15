@@ -38,7 +38,8 @@ def precedente(hermes, intentMessage):
   password_ =conf['global']['password']
   
   zone = soco.SoCo('192.168.10.4') 
-  zone.volume = zone.volume + 5
+  
+  zone.volume = 50
   
  
   hermes.publish_end_session(current_session_id)
