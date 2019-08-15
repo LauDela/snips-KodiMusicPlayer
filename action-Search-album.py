@@ -30,6 +30,7 @@ def read_configuration_file(configuration_file):
 
 def searchAlbum(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
+  current_session_id = intentMessage.session_id
   album_name = intentMessage.slots.album_name.first().value
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
@@ -50,7 +51,7 @@ def searchAlbum(hermes, intentMessage):
     try:
       requests.get("http://192.168.10.89/sonos.php?album="+str(albumid),timeout=2)
     except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
-      retour = "Veuillez patienter, je recherche l'album "+ str(titre) + " de "+str(artist)
+      retour = "Veuillez patienter, je recherche l'album "+str(titre)+" de "+str(artist)
       hermes.publish_end_session(current_session_id, str(retour))
     except:
       hermes.publish_end_session(current_session_id, "Oups problème")
