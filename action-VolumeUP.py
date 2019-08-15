@@ -9,6 +9,7 @@ import time
 import simplejson
 import requests
 import json
+import soco
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -28,31 +29,19 @@ def read_configuration_file(configuration_file):
         return dict()
 
 
-def jejoue(hermes, intentMessage):
+def precedente(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
   current_session_id = intentMessage.session_id
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
   password_ =conf['global']['password']
-  playlist_ =conf['global']['favorite_playlist']
-  headers = {'Content-type': 'application/json',}
-  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
   
+  zone = soco.SoCo('192.168.10.4') 
+  zone.volume = zone.volume + 5
   
-  data = '{"jsonrpc":"2.0","id":"1","method":"Player.Open","params":{"item":{"file":"special://profile/playlists/music/'+playlist_+'"}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-                                                                                        
-  data='{"jsonrpc": "2.0", "id": 1,"method": "GUI.ShowNotification", "params": {"title": "Lecture", "message":"Lecture playliste"}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = json.loads(json_obj)
-  
-
-  
-  hermes.publish_end_session(current_session_id, "Playliste démarée")
+ 
+  hermes.publish_end_session(current_session_id)
 
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
@@ -60,5 +49,5 @@ def snips_speak(hermes, intentMessage,sentence):
 
 if __name__ == "__main__":
     with Hermes("localhost:1883") as h:
-        h.subscribe_intent("LauDela:Play", jejoue) \
+        h.subscribe_intent("LauDela:VolumeUP", precedente) \
          .start()
