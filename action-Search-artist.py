@@ -33,7 +33,6 @@ def read_configuration_file(configuration_file):
 def searchArtist(hermes, intentMessage):
   conf = read_configuration_file(CONFIG_INI)
   artist_name = intentMessage.slots.artist.first().value
-  #artist_name = "alain souchon"
   addr_ = conf['global']['ip']
   port_ =conf['global']['port']
   user_ =conf['global']['user'] 
@@ -44,19 +43,12 @@ def searchArtist(hermes, intentMessage):
   request ="{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"audioLibrary.Getartists\", \"params\": { \"filter\": {\"field\": \"artist\", \"operator\": \"startswith\", \"value\": \""+artist_name+"\"}}}"
   url = "http://" +user_+":"+password_+"@"+ addr_ + ":" + port_ + "/jsonrpc?request=" + request
   kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  #print(url)
   try:
     response = requests.get(url)
     json_data = simplejson.loads(response.text)
     artist = json_data['result']['artists'][0]['artist']
     label = json_data['result']['artists'][0]['label']
     artistid = json_data['result']['artists'][0]['artistid']  
-    #hermes.publish_continue_session(current_session_id,"OK Veuillez patienter...",["LauDela:Search-artist"]) 
-    #hermes.publish_end_session(current_session_id, "Liste terminée")
-    #action_genereliste(hermes, intentMessage,artistid,conf)
-    #parametre= {'artistid' : artistid}
-    #hermes.publish_end_session(current_session_id, "Liste terminée ")
-    #url0="http://192.168.10.89/sonos.php?params="+artistid
     try:
       requests.get("http://192.168.10.89/sonos.php?params="+str(artistid),timeout=2)
     except requests.exceptions.ReadTimeout: #this confirms you that the request has reached server
@@ -64,59 +56,9 @@ def searchArtist(hermes, intentMessage):
       hermes.publish_end_session(current_session_id, str(retour))
     except:
       hermes.publish_end_session(current_session_id, "Oups problème")
-    
-    
-      
-    #result_sentence ="J'ai trouvé l'artiste ou groupe {}. Voici quelques titres.".format(str(label))
-    #print(result_sentence)
-    #hermes.publish_end_session(current_session_id, "Liste terminée "+str(r))
   except:
     hermes.publish_end_session(current_session_id, "Désolé je n'ai rien trouvé, peux tu reformuler ta demande ?")
 
-def action_genereliste(hermes, intentMessage,artistid,conf):
-  addr_ = conf['global']['ip']
-  port_ =conf['global']['port']
-  user_ =conf['global']['user'] 
-  password_ =conf['global']['password']
-  headers = {'Content-type': 'application/json',}
-  kodi_url = 'http://'+user_+':'+password_+'@'+addr_+':'+port_+'/jsonrpc'
-  current_session_id = intentMessage.session_id
-  zone = soco.SoCo('192.168.10.4')  
-  zone.clear_queue()
-  zone.stop()
-  #hermes.publish_continue_session(current_session_id,"La liste de lecture est en préparation. Veuillez patienter...",["LauDela:Search-artist"])
-  data = '{"id":"160","jsonrpc":"2.0","method":"Playlist.Clear","params":{"playlistid":1}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  #json_obj= response.text
-  #json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.Add", "params": {"playlistid": 1, "item": { "artistid":'+str(artistid)+'}}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  #json_obj= response.text
-  #json_data = json.loads(json_obj)
-  
-  data='{"jsonrpc": "2.0", "id": 1, "method": "Playlist.GetItems", "params": {"playlistid": 1}}'
-  response = requests.post(kodi_url, headers=headers, data=data)
-  json_obj= response.text
-  json_data = simplejson.loads(response.text)
-  #hermes.publish_end_session(current_session_id, "LA liste de lecture est en préparation. Veuillez patienter...")
-  hermes.publish_continue_session(current_session_id,"je commence la boucle. Veuillez patienter...",["LauDela:Search-artist"])
-  
-  #for song in json_data['result']['items']:
-  #  songId = song['id']
-  #  data='{"jsonrpc": "2.0", "id": 1, "method": "AudioLibrary.GetSongDetails", "params": {"songid": '+str(songId)+', "properties": ["title", "album", "artist","file"]}}'
-  #  response = requests.post(kodi_url, headers=headers, data=data)
-  #  json_obj0= response.text
-  #  json_data0 = json.loads(json_obj0)
-  #  chemin = json_data0['result']['songdetails']['file']
-  #  chemin1 = chemin.replace("smb","x-file-cifs")
-  #  chemin2 = requote_uri(chemin1)
-  #  zone.add_uri_to_queue(uri=chemin2)
-    
-  print("fin boucle")
-  #zone.play_from_queue(index=0)
-  #zone.play_mode = 'SHUFFLE'  
-  hermes.publish_continue_session(current_session_id,"La liste de lecture est terminée.",["LauDela:Search-artist"])
   
 def snips_speak(hermes, intentMessage,sentence):
     current_session_id = intentMessage.session_id
